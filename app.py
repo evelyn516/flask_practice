@@ -18,7 +18,7 @@ def index():
         new_name = request.form["name"],
         new_type = request.form["type"],
         new_level = request.form["level"]
-        print(type(new_name))
+        
         print(new_name[0], new_type[0], new_level)
 
         conn = get_db_connection()
@@ -30,18 +30,21 @@ def index():
     else:
         return render_template('home.html', title='POKEMON', pokelist=show_pokedex())
 
-@app.route('/delete/<pokemon_name>', methods=['GET', 'POST'])
-def delete(pokemon_name):
-        if request.method == 'POST':
+
+@app.route('/delete/<int:pokemon_id>')
+def delete(pokemon_id):
+        try:
             print('DELETE DELETE')
-            print(pokemon_name)
+            print(pokemon_id)
             conn = get_db_connection()
-            del_row = conn.execute("DELETE FROM pokemon WHERE id = ?",(request.form['id']))
-            return
-        else:
-            print(request.method)
+            del_row = conn.execute("DELETE FROM pokemon WHERE id = ?", (pokemon_id,))
+            conn.commit()
+            print("Record deleted successfully ")
+            conn.close()
+            return redirect(url_for("index"))
+        except:
             print('lol nope')
-            return render_template('home.html', title='POKEMON', pokelist=show_pokedex())
+            return 'there was a problem deleting that task'
 
 def show_pokedex():
     conn = get_db_connection()

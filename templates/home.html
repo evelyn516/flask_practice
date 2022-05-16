@@ -10,10 +10,8 @@
     </form>
     <div id="post-em-here">
         {% for pokemon in pokelist %}
-        <form method="POST" action="/delete/{{  pokemon.type  }}">
             <p>{{pokemon}}</p>
-            <input type="submit" value = "Delete" />
-            <!-- <input type="submit" value='DELETE'/> -->
+            <button><a href="/delete/{{pokemon[0]}}">DELETE</a></button>
         </form>
         {% endfor %}
     </div>
